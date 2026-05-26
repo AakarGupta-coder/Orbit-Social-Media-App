@@ -10,8 +10,9 @@ import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "config";
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
@@ -26,8 +27,8 @@ const UserWidget = ({ userId, picturePath }) => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
 
-  const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/users/${userId}`, {
+  const getUser = useCallback(async () => {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -37,11 +38,11 @@ const UserWidget = ({ userId, picturePath }) => {
       twitter: data.twitter || "",
       linkedin: data.linkedin || "",
     });
-  };
+  }, [token, userId]);
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [getUser]);
 
   if (!user) {
     return null;

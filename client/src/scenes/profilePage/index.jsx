@@ -1,5 +1,5 @@
 import { Box, useMediaQuery } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Navbar from "scenes/navbar";
@@ -7,6 +7,7 @@ import FriendListWidget from "scenes/widgets/FriendListWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
+import { API_BASE_URL } from "config";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -14,18 +15,18 @@ const ProfilePage = () => {
   const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
-  const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/users/${userId}`, {
+  const getUser = useCallback(async () => {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
     setUser(data);
-  };
+  }, [token, userId]);
 
   useEffect(() => {
     getUser();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [getUser]);
 
   if (!user) return null;
 

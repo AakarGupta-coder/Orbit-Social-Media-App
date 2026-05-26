@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import styled from "styled-components";
+import { SOCKET_BASE_URL } from "config";
 
-const socket = io.connect("http://localhost:6001");
+const socket = io.connect(SOCKET_BASE_URL);
 
 const Chat = () => {
     const [room, setRoom] = useState("");

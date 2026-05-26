@@ -1,4 +1,3 @@
-// color design tokens export
 export const colorTokens = {
   grey: {
     0: "#FFFFFF",
@@ -16,28 +15,26 @@ export const colorTokens = {
     1000: "#000000",
   },
   primary: {
-    50:  "#FFF4E5",  // Soft Cosmic Glow (Light Yellow)
+    50:  "#FFF4E5",
     100: "#FFE8CC",
     200: "#FFD099",
     300: "#FFB766",
-    400: "#FF9F33",  // Nebula Gold
-    500: "#FF8800",  // Solar Flare Orange
-    600: "#DB6E00",  // Deep Space Ember
-    700: "#B35600",  // Galactic Burn
-    800: "#803800",  // Dark Cosmic Fire
-    900: "#4D1E00",  // Deep Space Core
+    400: "#FF9F33",
+    500: "#FF8800",
+    600: "#DB6E00",
+    700: "#B35600",
+    800: "#803800",
+    900: "#4D1E00",
   },
 
 };
 
-// mui theme settings
 export const themeSettings = (mode) => {
   return {
     palette: {
       mode: mode,
       ...(mode === "dark"
         ? {
-            // palette values for dark mode
             primary: {
               dark: colorTokens.primary[200],
               main: colorTokens.primary[200],
@@ -56,7 +53,6 @@ export const themeSettings = (mode) => {
             },
           }
         : {
-            // palette values for light mode
             primary: {
               dark: colorTokens.primary[700],
               main: colorTokens.primary[500],

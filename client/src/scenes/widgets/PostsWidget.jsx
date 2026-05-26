@@ -1,40 +1,41 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
+import { API_BASE_URL } from "config";
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts) || []; // Ensure posts is always an array
+  const posts = useSelector((state) => state.posts) || [];
   const token = useSelector((state) => state.token);
 
-  const getPosts = async () => {
+  const getPosts = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:3001/posts", {
+      const response = await fetch(`${API_BASE_URL}/posts`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
-      console.log("Fetched posts:", data); // Debugging log
-      dispatch(setPosts({ posts: Array.isArray(data) ? data : [] })); // Ensure data is an array
+      console.log("Fetched posts:", data);
+      dispatch(setPosts({ posts: Array.isArray(data) ? data : [] }));
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
-  };
+  }, [dispatch, token]);
 
-  const getUserPosts = async () => {
+  const getUserPosts = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:3001/posts/${userId}/posts`, {
+      const response = await fetch(`${API_BASE_URL}/posts/${userId}/posts`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
-      console.log("Fetched user posts:", data); // Debugging log
-      dispatch(setPosts({ posts: Array.isArray(data) ? data : [] })); // Ensure data is an array
+      console.log("Fetched user posts:", data);
+      dispatch(setPosts({ posts: Array.isArray(data) ? data : [] }));
     } catch (error) {
       console.error("Error fetching user posts:", error);
     }
-  };
+  }, [dispatch, token, userId]);
 
   useEffect(() => {
     if (isProfile) {
@@ -42,7 +43,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getPosts();
     }
-  }, [isProfile, userId, token, dispatch]); // Added dependencies to prevent stale state
+  }, [isProfile, getPosts, getUserPosts]);
 
   return (
       <>
@@ -75,7 +76,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
                 )
             )
         ) : (
-            <p>No posts available</p> // Prevents crash when posts is undefined or empty
+            <p>No posts available</p>
         )}
       </>
   );

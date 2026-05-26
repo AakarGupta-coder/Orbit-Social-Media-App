@@ -71,7 +71,8 @@ orbit/
 │   ├── middleware/
 │   └── index.js
 │
-├── .env
+├── server/.env.example
+├── client/.env.example
 ├── README.md
 └── package.json
 ```
@@ -102,10 +103,10 @@ Make sure you have the following installed:
    npm install
    ```
 
-3. Create a `.env` file in the `server/` directory and add the following:
+3. Create a `.env` file in the `server/` directory using `.env.example` as a reference:
    ```
-   PORT=5000
-   MONGO_URI=your-mongodb-connection-string
+   PORT=3001
+   MONGO_URL=your-mongodb-connection-string
    JWT_SECRET=your-secret-key
    ```
 
@@ -134,6 +135,19 @@ Make sure you have the following installed:
    ```
 
 > The app will run on [http://localhost:3000](http://localhost:3000)
+
+---
+
+## ☁️ Free Deployment (Render)
+
+This repo includes a `render.yaml` blueprint for a free deployment on Render.
+
+1. Create a Render account and select **New > Blueprint**.
+2. Connect the repository and follow the prompts.
+3. Set environment variables:
+   - **API service**: `MONGO_URL`, `JWT_SECRET`
+   - **Static site**: `REACT_APP_API_URL` (set to the Render API URL), optional `REACT_APP_SOCKET_URL`
+4. Deploy. Render will build the client and start the server using the provided blueprint.
 
 ---
 

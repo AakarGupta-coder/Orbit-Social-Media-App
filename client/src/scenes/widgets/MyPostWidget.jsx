@@ -5,7 +5,6 @@ import {
   GifBoxOutlined,
   ImageOutlined,
   MicOutlined,
-  MoreHorizOutlined,
 } from "@mui/icons-material";
 import {
   Box,
@@ -15,7 +14,6 @@ import {
   useTheme,
   Button,
   IconButton,
-  useMediaQuery,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Dropzone from "react-dropzone";
@@ -24,6 +22,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
+import { API_BASE_URL } from "config";
 
 const MyPostWidget = ({ picturePath }) => {
   const dispatch = useDispatch();
@@ -36,7 +35,6 @@ const MyPostWidget = ({ picturePath }) => {
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
@@ -61,7 +59,7 @@ const MyPostWidget = ({ picturePath }) => {
       formData.append("audioPath", audio.name);
     }
 
-    const response = await fetch(`http://localhost:3001/posts`, {
+    const response = await fetch(`${API_BASE_URL}/posts`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
@@ -122,7 +120,6 @@ const MyPostWidget = ({ picturePath }) => {
         <Divider sx={{ margin: "1.25rem 0" }} />
 
         <FlexBetween>
-          {/* Image Upload */}
           <FlexBetween gap="0.25rem" onClick={() => setIsImage(!isImage)}>
             <ImageOutlined sx={{ color: mediumMain }} />
             <Typography
@@ -133,7 +130,6 @@ const MyPostWidget = ({ picturePath }) => {
             </Typography>
           </FlexBetween>
 
-          {/* Video Upload */}
           <FlexBetween gap="0.25rem">
             <label htmlFor="video-upload" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
               <GifBoxOutlined sx={{ color: mediumMain }} />
@@ -147,7 +143,6 @@ const MyPostWidget = ({ picturePath }) => {
             <input id="video-upload" type="file" accept="video/*" style={{ display: 'none' }} onChange={(e) => setVideo(e.target.files[0])} />
           </FlexBetween>
 
-          {/* Attachment Upload */}
           <FlexBetween gap="0.25rem">
             <label htmlFor="attachment-upload" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
               <AttachFileOutlined sx={{ color: mediumMain }} />
@@ -161,7 +156,6 @@ const MyPostWidget = ({ picturePath }) => {
             <input id="attachment-upload" type="file" style={{ display: 'none' }} onChange={(e) => setAttachment(e.target.files[0])} />
           </FlexBetween>
 
-          {/* Audio Upload */}
           <FlexBetween gap="0.25rem">
             <label htmlFor="audio-upload" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
               <MicOutlined sx={{ color: mediumMain }} />
@@ -175,7 +169,6 @@ const MyPostWidget = ({ picturePath }) => {
             <input id="audio-upload" type="file" accept="audio/*" style={{ display: 'none' }} onChange={(e) => setAudio(e.target.files[0])} />
           </FlexBetween>
 
-          {/* Post Button */}
           <Button
               disabled={!post}
               onClick={handlePost}
